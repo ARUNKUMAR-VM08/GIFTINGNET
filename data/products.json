@@ -1,0 +1,192 @@
+[
+  {
+    "id": "prod-1",
+    "title": "Full Stack Web Development Masterclass",
+    "description": "Go from zero to production-ready developer. Learn HTML, CSS, JavaScript, React, Node.js, and MongoDB with hands-on projects, exercises, and a complete e-commerce build.",
+    "type": "course",
+    "language": "English",
+    "category": "Web Development",
+    "price": 49.99,
+    "rating": 4.9,
+    "reviewsCount": 184,
+    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "50+ hours of high-definition video lessons",
+      "Full e-commerce capstone project source code included",
+      "Access to exclusive developer Discord community",
+      "Certificate of Completion"
+    ],
+    "downloadUrl": "/assets/sample_course.html"
+  },
+  {
+    "id": "prod-2",
+    "title": "Introducción a Python y Ciencia de Datos",
+    "description": "Domina la programación en Python desde las bases hasta el análisis de datos con Pandas, NumPy y visualizaciones avanzadas con Matplotlib.",
+    "type": "course",
+    "language": "Spanish",
+    "category": "Data Science",
+    "price": 39.99,
+    "rating": 4.8,
+    "reviewsCount": 92,
+    "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "Explicaciones en español claro y conciso",
+      "20+ cuadernos de Jupyter descargables",
+      "Ejercicios prácticos con datos del mundo real",
+      "Acceso de por vida"
+    ],
+    "downloadUrl": "/assets/sample_course.html"
+  },
+  {
+    "id": "prod-3",
+    "title": "Apprendre le JavaScript de A à Z",
+    "description": "Le guide ultime pour maîtriser JavaScript. Apprenez les bases, l'ES6+, l'asynchrone, les API et créez des applications dynamiques de niveau professionnel.",
+    "type": "course",
+    "language": "French",
+    "category": "Programming",
+    "price": 29.99,
+    "rating": 4.7,
+    "reviewsCount": 65,
+    "image": "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "Cours 100% en français",
+      "Projets réels à ajouter à votre portfolio",
+      "Quiz et exercices interactifs",
+      "Support enseignant 7j/7"
+    ],
+    "downloadUrl": "/assets/sample_course.html"
+  },
+  {
+    "id": "prod-4",
+    "title": "Modern Go Programming Cookbook",
+    "description": "An exhaustive PDF guidebook featuring over 80 production-grade Go recipes. Covers concurrency patterns, microservices design, profiling, and web server performance tuning.",
+    "type": "pdf",
+    "language": "English",
+    "category": "Programming",
+    "price": 14.99,
+    "rating": 4.9,
+    "reviewsCount": 210,
+    "image": "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "Premium 350-page PDF with clear formatting",
+      "Downloadable companion source code for every recipe",
+      "Updated for Go 1.22",
+      "Interactive code index"
+    ],
+    "downloadUrl": "/assets/sample.pdf"
+  },
+  {
+    "id": "prod-5",
+    "title": "Guía Completa de CSS Grid y Flexbox",
+    "description": "Olvídate de las dificultades para maquetar tus páginas web. Esta guía en PDF te enseña a crear layouts espectaculares y responsivos paso a paso.",
+    "type": "pdf",
+    "language": "Spanish",
+    "category": "Web Development",
+    "price": 9.99,
+    "rating": 4.6,
+    "reviewsCount": 78,
+    "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "Libro digital en formato PDF de alta calidad",
+      "Ejemplos visuales interactivos y diagramas",
+      "Ejercicios resueltos y retos propuestos",
+      "Hojas de referencia rápidas (cheat sheets)"
+    ],
+    "downloadUrl": "/assets/sample.pdf"
+  },
+  {
+    "id": "prod-6",
+    "title": "Docker & Kubernetes Production-Ready Templates",
+    "description": "A comprehensive ZIP bundle with production-grade Dockerfiles, Compose files, Kubernetes manifests, Helm charts, and CI/CD pipelines (GitHub Actions & GitLab CI).",
+    "type": "file",
+    "language": "English",
+    "category": "DevOps",
+    "price": 24.99,
+    "rating": 4.8,
+    "reviewsCount": 142,
+    "image": "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "Complete ZIP archive with pre-configured templates",
+      "Supports Node.js, Python, Java, Go, and Ruby microservices",
+      "Optimized for high-availability, caching, and auto-scaling",
+      "Step-by-step setup documentation included"
+    ],
+    "downloadUrl": "/assets/sample.zip"
+  },
+  {
+    "id": "prod-7",
+    "title": "日本語の日常会話マスターガイド (Japanese Daily Conversation PDF)",
+    "description": "Un guide d'apprentissage pratique pour maîtriser les conversations quotidiennes japonaises avec des fiches de vocabulaire, d'hiragana/katakana et de kanji de base.",
+    "type": "pdf",
+    "language": "Japanese",
+    "category": "Language Learning",
+    "price": 12.50,
+    "rating": 4.7,
+    "reviewsCount": 44,
+    "image": "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "Japanese Hiragana, Katakana, and basic Kanji reference",
+      "50 practical situational dialogue dialogues",
+      "Downloadable MP3 audio file links included in PDF",
+      "High quality printable layout"
+    ],
+    "downloadUrl": "/assets/sample.pdf"
+  },
+  {
+    "id": "prod-8",
+    "title": "零基础精通微信小程序开发 (WeChat Mini-Program Development)",
+    "description": "全面剖析微信小程序架构、组件、API与云开发技术。从零基础到独立发布高可用小程序，包含3个企业级实战案例。",
+    "type": "course",
+    "language": "Chinese",
+    "category": "Web Development",
+    "price": 34.99,
+    "rating": 4.9,
+    "reviewsCount": 115,
+    "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "中文高画质视频讲解与课件下载",
+      "涵盖小程序云开发、定位、支付等高级API",
+      "提供3个完整的企业级微信小程序前后端源码",
+      "老师在线一对一问答和代码审阅服务"
+    ],
+    "downloadUrl": "/assets/sample_course.html"
+  },
+  {
+    "id": "prod-9",
+    "title": "البنية البرمجية وهياكل البيانات بلغة ++C (C++ Data Structures)",
+    "description": "دورة شاملة ومفصلة لشرح هياكل البيانات والخوارزميات بلغة ++C. تعلم تصميم وتحليل الخوارزميات بكفاءة عالية وبطريقة أكاديمية مبسطة.",
+    "type": "course",
+    "language": "Arabic",
+    "category": "Programming",
+    "price": 27.99,
+    "rating": 4.8,
+    "reviewsCount": 59,
+    "image": "https://images.unsplash.com/photo-1618401471353-b98aedd07871?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "شرح كامل باللغة العربية الفصحى المبسطة",
+      "أكثر من 30 تمريناً برمجياً محلولاً بالكامل",
+      "تغطية شاملة لـ Arrays, Trees, Graphs, sorting & searching algorithms",
+      "شهادة إتمام معتمدة بعد إنهاء جميع المشاريع"
+    ],
+    "downloadUrl": "/assets/sample_course.html"
+  },
+  {
+    "id": "prod-10",
+    "title": "Complete Hindi Web Design Guide (वेब डिजाइनिंग गाइड)",
+    "description": "यह ई-बुक आपको हिंदी में वेबसाइट डिजाइनिंग, यूआई/यूएक्स डिज़ाइन के सिद्धांत, और वर्डप्रेस के माध्यम से बिना कोडिंग वेबसाइट बनाना सिखाएगी।",
+    "type": "pdf",
+    "language": "Hindi",
+    "category": "Web Development",
+    "price": 7.99,
+    "rating": 4.5,
+    "reviewsCount": 39,
+    "image": "https://images.unsplash.com/photo-1541462608141-27b2c7452167?auto=format&fit=crop&w=400&q=80",
+    "features": [
+      "आसान हिंदी भाषा में लिखी गई डिजिटल बुक (PDF)",
+      "वर्डप्रेस, फिग्मा और फोटोशॉप के ट्यूटोरियल्स शामिल",
+      "50 से अधिक फ्री टू यूज़ UI टेम्प्लेट्स की सूची",
+      "डिजिटल सर्टिफिकेट और लाइफटाइम अपडेट"
+    ],
+    "downloadUrl": "/assets/sample.pdf"
+  }
+]

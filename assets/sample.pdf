@@ -1,0 +1,35 @@
+===================================================================
+             GLOBAL DIGITAL ACADEMY - PREMIUM RESOURCE
+===================================================================
+Congratulations on purchasing this premium digital resource!
+
+This file serves as your premium reference cheat sheet and guide.
+
+-------------------------------------------------------------------
+Section 1: Core Architectures & Cheat Sheets
+-------------------------------------------------------------------
+1. RESTful API Best Practices:
+   - Use nouns representing collections, not verbs (e.g. /api/products, not /api/getProducts).
+   - Use correct HTTP Verbs: GET, POST, PUT, DELETE, PATCH.
+   - Return clear JSON payloads with standardized error formatting.
+
+2. React & Modern Frontend Architecture:
+   - Keep state close to where it's used. Prefer custom hooks for reusable logic.
+   - Use CSS Utility classes (Tailwind) for responsive, fast, and elegant styling.
+
+3. Git Command Quick Reference:
+   - Undo last commit (soft): git reset --soft HEAD~1
+   - Create and switch branch: git checkout -b feature/awesome-thing
+   - Revert a file: git checkout path/to/file
+
+-------------------------------------------------------------------
+Section 2: High Performance Design Patterns
+-------------------------------------------------------------------
+- Circuit Breaker: Prevents cascading failures across microservices.
+- Saga Pattern: Manages distributed transactions.
+- CQRS: Separates read operations from write operations for max scale.
+
+-------------------------------------------------------------------
+Thank you for your business!
+Learn more and explore other resources: http://localhost:3000
+===================================================================

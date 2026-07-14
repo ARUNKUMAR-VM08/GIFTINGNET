@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalDigital - Merchant Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- Navigation Bar -->
+  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <div class="bg-indigo-600 text-white p-2 rounded-lg flex items-center justify-center shadow-lg">
+            <i class="fas fa-user-shield text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-black tracking-tight bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent flex items-center">
+              GlobalDigital <span class="ml-2 text-[10px] font-extrabold uppercase px-2 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">Merchant Control</span>
+            </h1>
+            <p class="text-[10px] text-gray-400 font-medium tracking-wide uppercase">Add Digital Courses, eBooks, & files</p>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="flex items-center space-x-6">
+          <a href="/" class="text-sm font-semibold text-gray-300 hover:text-white transition flex items-center space-x-1.5">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Back to Storefront</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Main Workspace -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- Hero Status banner -->
+    <div class="bg-slate-900 text-white p-6 rounded-3xl border border-indigo-950 mb-8 flex flex-col md:flex-row items-center justify-between shadow-xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px)] bg-[size:4rem] opacity-30"></div>
+      <div class="relative z-10 space-y-2 text-center md:text-left">
+        <h2 class="text-xl md:text-2xl font-black tracking-tight">Merchant & Creator Dashboard</h2>
+        <p class="text-xs text-slate-350 max-w-xl">
+          Register new digital products across any language, set prices, define syllabus bullets, and track listing inventories instantaneously.
+        </p>
+      </div>
+      <div class="relative z-10 flex space-x-3 mt-4 md:mt-0">
+        <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700/60 text-center min-w-[100px]">
+          <span class="block text-xl font-black text-indigo-400" id="total-listings-count">0</span>
+          <span class="text-[9px] text-slate-400 font-semibold uppercase">Total Products</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left 1-Column: Add New Digital Asset Form -->
+      <section class="lg:col-span-1">
+        <div class="bg-white rounded-2xl border border-gray-250 p-6 shadow-sm space-y-5">
+          <h3 class="font-extrabold text-slate-800 text-base flex items-center border-b border-gray-150 pb-3">
+            <i class="fas fa-plus-circle text-indigo-500 mr-2"></i> Register New Product
+          </h3>
+
+          <form id="add-product-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Product Title</label>
+              <input type="text" id="prod-title" required placeholder="e.g. Master React in Hindi" class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Description</label>
+              <textarea id="prod-desc" required rows="3" placeholder="e.g. The definitive video course explaining hooks..." class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Resource Type</label>
+                <select id="prod-type" required class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                  <option value="course">Premium Video Course</option>
+                  <option value="pdf">eBook / PDF Document</option>
+                  <option value="file">Source Code / ZIP File</option>
+                </select>
+              </div>
+
+              <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Listing Price (USD)</label>
+                <input type="number" step="0.01" min="0" id="prod-price" required placeholder="e.g. 19.99" class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Language</label>
+                <input type="text" id="prod-lang" required placeholder="e.g. German, French" class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+              </div>
+
+              <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Category</label>
+                <input type="text" id="prod-category" required placeholder="e.g. Web Development" class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Image URL (Optional)</label>
+              <input type="url" id="prod-image" placeholder="https://unsplash.com/..." class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Syllabus / Key Features (1 per line)</label>
+              <textarea id="prod-features" rows="3" placeholder="Includes 40 video lectures&#10;Step-by-step PDF manual included&#10;Full premium codebase included" class="w-full bg-slate-55 border border-gray-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+              <i class="fas fa-check-circle"></i>
+              <span>Create Product Listing</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Right 2-Columns: Product Catalog Inventory -->
+      <section class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-250 p-6 shadow-sm space-y-4">
+          <h3 class="font-extrabold text-slate-800 text-base flex items-center border-b border-gray-150 pb-3">
+            <i class="fas fa-list text-indigo-500 mr-2"></i> Inventory Listings
+          </h3>
+
+          <!-- Table listings -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500 uppercase font-extrabold">
+                  <th class="py-3 px-2">Info</th>
+                  <th class="py-3 px-2">Type</th>
+                  <th class="py-3 px-2">Language</th>
+                  <th class="py-3 px-2">Category</th>
+                  <th class="py-3 px-2 text-right">Price</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-list" class="divide-y divide-slate-100 text-slate-600 font-medium">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Global Toast Alerts container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 space-y-3 z-70"></div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 px-4 sm:px-6 lg:px-8 mt-auto">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-xs">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-globe text-indigo-400 text-sm"></i>
+        <span class="font-semibold text-white">GlobalDigital Inc.</span>
+        <span>© 2025. Merchant Dashboard.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="admin.js"></script>
+</body>
+</html>

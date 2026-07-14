@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalAcademy - Digital Course Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Styling custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between shadow-lg">
+    <div class="flex items-center space-x-3">
+      <div class="bg-indigo-600 text-white p-2.5 rounded-lg flex items-center justify-center shadow-md">
+        <i class="fas fa-graduation-cap text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold tracking-tight text-white flex items-center">
+          GlobalAcademy <span class="ml-2 px-2 py-0.5 text-xs font-semibold bg-green-500/20 text-green-400 rounded-full border border-green-500/30">Active Student</span>
+        </h1>
+        <p class="text-xs text-gray-400">Your Premium Learning Area</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <a href="/" class="text-sm font-medium text-gray-300 hover:text-white transition flex items-center space-x-1">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to Storefront</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Player Workspace -->
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+
+    <!-- Left Column: Video and Tabs -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+
+      <!-- Video Player Wrapper -->
+      <div class="relative bg-black w-full aspect-video flex flex-col justify-between p-4 group" style="background-image: radial-gradient(circle, #2d3748 0%, #1a202c 100%);">
+        <!-- Overlay on pause/hover -->
+        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+          <button onclick="togglePlay()" id="centerPlayBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-xl transition-transform transform hover:scale-105">
+            <i class="fas fa-play ml-1" id="centerPlayIcon"></i>
+          </button>
+        </div>
+
+        <!-- Video Top Details -->
+        <div class="z-10 flex justify-between items-start">
+          <span class="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-md text-xs font-semibold border border-white/10" id="videoBadge">
+            Section 1 • Lecture 1
+          </span>
+          <span class="bg-indigo-600 text-xs px-2.5 py-1 rounded-md font-medium shadow-lg">
+            1080p HD
+          </span>
+        </div>
+
+        <!-- Video Simulation Screen -->
+        <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+          <div class="w-20 h-20 bg-indigo-600/10 text-indigo-400 rounded-full flex items-center justify-center border-2 border-indigo-500/20 mb-4 animate-pulse">
+            <i class="fas fa-play text-3xl ml-1"></i>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold tracking-wide" id="videoTitle">Getting Started with Global Digital Academy</h2>
+          <p class="text-sm text-gray-400 max-w-md mt-2">Click the play button below or select a lesson from the right playlist panel to begin learning.</p>
+        </div>
+
+        <!-- Video Controls Bar -->
+        <div class="z-10 bg-gray-900/90 backdrop-blur-md p-3 rounded-lg border border-white/10 flex flex-col space-y-2 mt-auto">
+          <!-- Timeline -->
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-gray-400 font-mono" id="currentTime">00:00</span>
+            <div class="flex-1 bg-gray-700 h-1.5 rounded-full relative cursor-pointer" onclick="seekVideo(event)">
+              <div class="bg-indigo-500 h-full w-1/4 rounded-full relative" id="progressBar">
+                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg"></div>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400 font-mono" id="durationTime">12:34</span>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <button onclick="togglePlay()" class="text-gray-300 hover:text-white transition">
+                <i class="fas fa-play" id="playIcon"></i>
+              </button>
+              <button class="text-gray-300 hover:text-white transition">
+                <i class="fas fa-forward"></i>
+              </button>
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-volume-up text-gray-400"></i>
+                <div class="w-16 bg-gray-700 h-1 rounded-full">
+                  <div class="bg-white h-full w-4/5 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <button onclick="toggleCaption()" class="text-xs font-semibold px-2 py-0.5 border border-gray-600 rounded text-gray-400 hover:text-white transition" id="captionBtn">
+                CC
+              </button>
+              <button class="text-gray-300 hover:text-white transition">
+                <i class="fas fa-cog"></i>
+              </button>
+              <button class="text-gray-300 hover:text-white transition">
+                <i class="fas fa-expand"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Meta / Tab Options -->
+      <div class="border-b border-gray-800 bg-gray-850 px-6">
+        <nav class="flex space-x-6">
+          <button onclick="switchTab('about')" id="tab-about" class="border-b-2 border-indigo-500 py-4 px-1 text-sm font-semibold text-white">
+            About This Course
+          </button>
+          <button onclick="switchTab('resources')" id="tab-resources" class="border-b-2 border-transparent py-4 px-1 text-sm font-semibold text-gray-400 hover:text-white transition">
+            Resources & Downloads
+          </button>
+          <button onclick="switchTab('announcements')" id="tab-announcements" class="border-b-2 border-transparent py-4 px-1 text-sm font-semibold text-gray-400 hover:text-white transition">
+            Syllabus & Info
+          </button>
+        </nav>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="p-6 flex-1 bg-gray-900">
+        <!-- About Content -->
+        <div id="content-about" class="space-y-4">
+          <h3 class="text-xl font-bold">Welcome to Your Premium Digital Course!</h3>
+          <p class="text-gray-300 leading-relaxed text-sm">
+            Thank you for buying this premium digital course! You have unlocked lifetime access to all learning materials, exercises, and project codebases.
+          </p>
+          <div class="bg-indigo-600/10 border border-indigo-500/20 p-4 rounded-xl flex items-start space-x-3">
+            <i class="fas fa-star text-indigo-400 text-lg mt-0.5"></i>
+            <div>
+              <h4 class="font-bold text-sm text-indigo-300">How to Succeed in This Course</h4>
+              <p class="text-xs text-gray-300 mt-1">
+                Follow along with the modules step by step. Complete each challenge and exercise before moving on to the next. Do not copy-paste code; write it out manually to build muscle memory!
+              </p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+            <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50">
+              <h4 class="font-bold text-sm text-white mb-2"><i class="fas fa-laptop-code text-indigo-400 mr-2"></i>Hands-On Labs</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                Every lecture comes with a hands-on project or laboratory. Use the resource links tab to download supporting files, schemas, and configurations.
+              </p>
+            </div>
+            <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50">
+              <h4 class="font-bold text-sm text-white mb-2"><i class="fas fa-question-circle text-indigo-400 mr-2"></i>Developer Community</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                Connect with thousands of students from over 120 countries! Find peer code reviews, networking channels, and hackathons inside our exclusive community.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resources Content -->
+        <div id="content-resources" class="hidden space-y-4">
+          <h3 class="text-lg font-bold">Course Downloads & Companion Files</h3>
+          <p class="text-xs text-gray-400">All student resources are direct, clean, and pre-packaged for instant use.</p>
+
+          <div class="space-y-2">
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-red-500/10 text-red-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-file-pdf text-lg"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm">Course Syllabus & Resource Guide</h4>
+                  <p class="text-xs text-gray-400">PDF • 4.2 MB • Updated this week</p>
+                </div>
+              </div>
+              <a href="/assets/sample.pdf" download class="bg-gray-700 hover:bg-gray-600 text-xs font-semibold px-4 py-2 rounded-lg transition flex items-center space-x-1">
+                <i class="fas fa-download"></i>
+                <span>Download</span>
+              </a>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-yellow-500/10 text-yellow-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-file-archive text-lg"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm">Complete Code Boilerplate & Assets</h4>
+                  <p class="text-xs text-gray-400">ZIP • 18.5 MB • Fully Commented</p>
+                </div>
+              </div>
+              <a href="/assets/sample.zip" download class="bg-gray-700 hover:bg-gray-600 text-xs font-semibold px-4 py-2 rounded-lg transition flex items-center space-x-1">
+                <i class="fas fa-download"></i>
+                <span>Download Code</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Syllabus Content -->
+        <div id="content-announcements" class="hidden space-y-4">
+          <h3 class="text-lg font-bold">Comprehensive Curriculum</h3>
+          <div class="space-y-2">
+            <div class="bg-gray-800 p-3 rounded-lg border border-gray-750 flex justify-between text-xs">
+              <span class="font-semibold text-gray-300">Module 1: Introduction & Fundamentals</span>
+              <span class="text-indigo-400 font-medium">4 lessons (45 mins)</span>
+            </div>
+            <div class="bg-gray-800 p-3 rounded-lg border border-gray-750 flex justify-between text-xs">
+              <span class="font-semibold text-gray-300">Module 2: Practical Application Building</span>
+              <span class="text-indigo-400 font-medium">8 lessons (120 mins)</span>
+            </div>
+            <div class="bg-gray-800 p-3 rounded-lg border border-gray-750 flex justify-between text-xs">
+              <span class="font-semibold text-gray-300">Module 3: Advanced Optimization & Deployment</span>
+              <span class="text-indigo-400 font-medium">6 lessons (95 mins)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Playlist Panel -->
+    <div class="w-full lg:w-96 border-t lg:border-t-0 lg:border-l border-gray-800 bg-gray-850 flex flex-col overflow-y-auto">
+      <div class="p-4 border-b border-gray-800 flex items-center justify-between bg-gray-800/40">
+        <h3 class="font-bold text-sm flex items-center">
+          <i class="fas fa-list-ul mr-2 text-indigo-400"></i>
+          Course Playlists
+        </h3>
+        <span class="text-xs text-indigo-400 font-semibold" id="progressText">1 / 4 Completed</span>
+      </div>
+
+      <!-- Course Content Lectures -->
+      <div class="divide-y divide-gray-800" id="playlist">
+        <!-- Lecture 1 -->
+        <button onclick="playLecture(1, 'Course Introduction & Workspace Setup', '12:34', 'Section 1 • Lecture 1')" class="w-full p-4 text-left flex items-start space-x-3 bg-indigo-950/20 hover:bg-gray-800/50 transition border-l-4 border-indigo-500 focus:outline-none lecture-btn">
+          <div class="mt-0.5 text-indigo-400">
+            <i class="fas fa-play-circle text-lg" id="lectureIcon-1"></i>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-bold text-white leading-snug">1. Course Introduction & Workspace Setup</h4>
+            <div class="flex items-center space-x-2 mt-1">
+              <span class="text-[10px] text-gray-400 flex items-center">
+                <i class="far fa-clock mr-1"></i> 12:34
+              </span>
+              <span class="text-[10px] bg-green-500/20 text-green-400 px-1 rounded">COMPLETED</span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Lecture 2 -->
+        <button onclick="playLecture(2, 'Mastering Core Architecture & Syntaxes', '18:15', 'Section 1 • Lecture 2')" class="w-full p-4 text-left flex items-start space-x-3 hover:bg-gray-800/50 transition border-l-4 border-transparent focus:outline-none lecture-btn">
+          <div class="mt-0.5 text-gray-400">
+            <i class="far fa-play-circle text-lg" id="lectureIcon-2"></i>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-bold text-gray-300 leading-snug">2. Mastering Core Architecture & Syntaxes</h4>
+            <div class="flex items-center space-x-2 mt-1">
+              <span class="text-[10px] text-gray-400 flex items-center">
+                <i class="far fa-clock mr-1"></i> 18:15
+              </span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Lecture 3 -->
+        <button onclick="playLecture(3, 'Building Your First Digital Project', '25:40', 'Section 2 • Lecture 3')" class="w-full p-4 text-left flex items-start space-x-3 hover:bg-gray-800/50 transition border-l-4 border-transparent focus:outline-none lecture-btn">
+          <div class="mt-0.5 text-gray-400">
+            <i class="far fa-play-circle text-lg" id="lectureIcon-3"></i>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-bold text-gray-300 leading-snug">3. Building Your First Digital Project</h4>
+            <div class="flex items-center space-x-2 mt-1">
+              <span class="text-[10px] text-gray-400 flex items-center">
+                <i class="far fa-clock mr-1"></i> 25:40
+              </span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Lecture 4 -->
+        <button onclick="playLecture(4, 'Deploying Applications to Public Cloud Platforms', '15:20', 'Section 3 • Lecture 4')" class="w-full p-4 text-left flex items-start space-x-3 hover:bg-gray-800/50 transition border-l-4 border-transparent focus:outline-none lecture-btn">
+          <div class="mt-0.5 text-gray-400">
+            <i class="far fa-play-circle text-lg" id="lectureIcon-4"></i>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-bold text-gray-300 leading-snug">4. Deploying Applications to Public Cloud Platforms</h4>
+            <div class="flex items-center space-x-2 mt-1">
+              <span class="text-[10px] text-gray-400 flex items-center">
+                <i class="far fa-clock mr-1"></i> 15:20
+              </span>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let isPlaying = false;
+    let currentLectureId = 1;
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      const playIcon = document.getElementById('playIcon');
+      const centerPlayIcon = document.getElementById('centerPlayIcon');
+
+      if (isPlaying) {
+        playIcon.className = "fas fa-pause";
+        centerPlayIcon.className = "fas fa-pause";
+        document.getElementById('progressBar').style.width = '60%';
+        document.getElementById('currentTime').textContent = '07:25';
+      } else {
+        playIcon.className = "fas fa-play";
+        centerPlayIcon.className = "fas fa-play ml-1";
+      }
+    }
+
+    function playLecture(id, title, duration, section) {
+      currentLectureId = id;
+      document.getElementById('videoTitle').textContent = title;
+      document.getElementById('durationTime').textContent = duration;
+      document.getElementById('videoBadge').textContent = section;
+
+      // Update playlist selection styling
+      const buttons = document.querySelectorAll('.lecture-btn');
+      buttons.forEach((btn, index) => {
+        if (index + 1 === id) {
+          btn.classList.add('bg-indigo-950/20', 'border-indigo-500');
+          btn.classList.remove('border-transparent');
+          const icon = btn.querySelector('i');
+          icon.className = "fas fa-play-circle text-lg text-indigo-400";
+        } else {
+          btn.classList.remove('bg-indigo-950/20', 'border-indigo-500');
+          btn.classList.add('border-transparent');
+          const icon = btn.querySelector('i');
+          if (index + 1 < id) {
+            icon.className = "fas fa-check-circle text-lg text-green-400";
+          } else {
+            icon.className = "far fa-play-circle text-lg text-gray-400";
+          }
+        }
+      });
+
+      // Update progress completion
+      let completedCount = 0;
+      buttons.forEach((btn, index) => {
+        if (index + 1 <= id) completedCount++;
+      });
+      document.getElementById('progressText').textContent = `${completedCount} / 4 Completed`;
+
+      // Reset controls
+      isPlaying = false;
+      document.getElementById('playIcon').className = "fas fa-play";
+      document.getElementById('centerPlayIcon').className = "fas fa-play ml-1";
+      document.getElementById('progressBar').style.width = '0%';
+      document.getElementById('currentTime').textContent = '00:00';
+    }
+
+    function switchTab(tabId) {
+      const tabs = ['about', 'resources', 'announcements'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        const content = document.getElementById(`content-${t}`);
+        if (t === tabId) {
+          btn.classList.add('border-indigo-500', 'text-white');
+          btn.classList.remove('border-transparent', 'text-gray-400');
+          content.classList.remove('hidden');
+        } else {
+          btn.classList.add('border-transparent', 'text-gray-400');
+          btn.classList.remove('border-indigo-500', 'text-white');
+          content.classList.add('hidden');
+        }
+      });
+    }
+
+    function toggleCaption() {
+      const btn = document.getElementById('captionBtn');
+      if (btn.classList.contains('text-indigo-400')) {
+        btn.classList.remove('text-indigo-400', 'border-indigo-400');
+        btn.classList.add('text-gray-400', 'border-gray-600');
+      } else {
+        btn.classList.add('text-indigo-400', 'border-indigo-400');
+        btn.classList.remove('text-gray-400', 'border-gray-600');
+      }
+    }
+
+    function seekVideo(event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const pct = (x / rect.width) * 100;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+
+      const parts = document.getElementById('durationTime').textContent.split(':');
+      const totalSeconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      const currentSeconds = Math.round((pct / 100) * totalSeconds);
+      const mins = Math.floor(currentSeconds / 60).toString().padStart(2, '0');
+      const secs = (currentSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('currentTime').textContent = `${mins}:${secs}`;
+    }
+  </script>
+</body>
+</html>
