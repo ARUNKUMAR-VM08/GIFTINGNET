@@ -2,9 +2,11 @@
 let allProducts = [];
 let filteredProducts = [];
 let cart = [];
+let currentPaymentMethod = 'stripe'; // defaults to stripe credit card
 
 // Filter State
 let selectedLanguages = new Set();
+let selectedProgrammingLanguages = new Set();
 let selectedTypes = new Set();
 let selectedCategories = new Set();
 let searchQuery = '';
@@ -15,6 +17,7 @@ const noResults = document.getElementById('no-results');
 const resultsCount = document.getElementById('results-count');
 const searchInput = document.getElementById('search-input');
 const languageFiltersContainer = document.getElementById('language-filters-container');
+const programmingLanguageFiltersContainer = document.getElementById('programming-language-filters-container');
 const typeFiltersContainer = document.getElementById('type-filters-container');
 const categoryFiltersContainer = document.getElementById('category-filters-container');
 
@@ -89,6 +92,7 @@ async function fetchProducts() {
 // Extract filter categories dynamically from products
 function generateFiltersUI() {
   const languages = [...new Set(allProducts.map(p => p.language))];
+  const programmingLanguages = [...new Set(allProducts.map(p => p.programmingLanguage || 'No Code'))];
   const types = [...new Set(allProducts.map(p => p.type))];
   const categories = [...new Set(allProducts.map(p => p.category))];
 
@@ -100,6 +104,20 @@ function generateFiltersUI() {
         <div class="flex items-center space-x-2.5">
           <input type="checkbox" value="${lang}" onchange="toggleFilter('language', '${lang}')" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
           <span class="font-medium">${lang}</span>
+        </div>
+        <span class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded-full font-bold text-slate-400">${count}</span>
+      </label>
+    `;
+  }).join('');
+
+  // Render Programming Languages filters
+  programmingLanguageFiltersContainer.innerHTML = programmingLanguages.map(pl => {
+    const count = allProducts.filter(p => (p.programmingLanguage || 'No Code') === pl).length;
+    return `
+      <label class="flex items-center justify-between text-xs text-slate-600 hover:text-slate-800 cursor-pointer p-1 rounded hover:bg-slate-50">
+        <div class="flex items-center space-x-2.5">
+          <input type="checkbox" value="${pl}" onchange="toggleFilter('programmingLanguage', '${pl}')" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+          <span class="font-medium">${pl}</span>
         </div>
         <span class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded-full font-bold text-slate-400">${count}</span>
       </label>
@@ -140,6 +158,8 @@ function generateFiltersUI() {
 function toggleFilter(filterType, value) {
   if (filterType === 'language') {
     selectedLanguages.has(value) ? selectedLanguages.delete(value) : selectedLanguages.add(value);
+  } else if (filterType === 'programmingLanguage') {
+    selectedProgrammingLanguages.has(value) ? selectedProgrammingLanguages.delete(value) : selectedProgrammingLanguages.add(value);
   } else if (filterType === 'type') {
     selectedTypes.has(value) ? selectedTypes.delete(value) : selectedTypes.add(value);
   } else if (filterType === 'category') {
@@ -161,6 +181,7 @@ function handleSearchInput(event) {
 // Reset filters to full state
 function resetFilters() {
   selectedLanguages.clear();
+  selectedProgrammingLanguages.clear();
   selectedTypes.clear();
   selectedCategories.clear();
   searchQuery = '';
@@ -181,8 +202,12 @@ function applyFilters() {
       p.title.toLowerCase().includes(searchQuery) ||
       p.description.toLowerCase().includes(searchQuery);
 
-    // Match languages
+    // Match written languages
     const matchesLanguage = selectedLanguages.size === 0 || selectedLanguages.has(p.language);
+
+    // Match programming languages
+    const progLang = p.programmingLanguage || 'No Code';
+    const matchesProgrammingLanguage = selectedProgrammingLanguages.size === 0 || selectedProgrammingLanguages.has(progLang);
 
     // Match types
     const matchesType = selectedTypes.size === 0 || selectedTypes.has(p.type);
@@ -190,7 +215,7 @@ function applyFilters() {
     // Match categories
     const matchesCategory = selectedCategories.size === 0 || selectedCategories.has(p.category);
 
-    return matchesSearch && matchesLanguage && matchesType && matchesCategory;
+    return matchesSearch && matchesLanguage && matchesProgrammingLanguage && matchesType && matchesCategory;
   });
 
   renderProducts();
@@ -243,6 +268,7 @@ function renderProducts() {
       </li>
     `).join('');
 
+    const progLangLabel = p.programmingLanguage ? p.programmingLanguage : 'General';
     return `
       <div class="bg-white rounded-2xl border border-gray-250 overflow-hidden hover-scale-card shadow-sm flex flex-col justify-between">
         <!-- Card Header Image -->
@@ -250,6 +276,9 @@ function renderProducts() {
           <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">
           <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/10 flex items-center">
             <i class="fas fa-globe mr-1"></i> ${p.language}
+          </span>
+          <span class="absolute top-3 right-3 bg-indigo-600/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg border border-white/10 flex items-center">
+            <i class="fas fa-code mr-1"></i> ${progLangLabel}
           </span>
           <span class="absolute bottom-3 right-3 ${typeColor} text-[10px] font-extrabold px-2.5 py-1 rounded-lg border flex items-center shadow-md">
             <i class="fas ${typeIcon} mr-1.5"></i> ${typeLabel}
@@ -276,13 +305,25 @@ function renderProducts() {
             ${featuresList}
           </ul>
 
-          <!-- Card Actions -->
-          <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-            <span class="text-lg font-black text-slate-800">$${p.price.toFixed(2)}</span>
-            <button onclick="addToCart('${p.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5">
-              <i class="fas fa-cart-plus"></i>
-              <span>Add to Cart</span>
-            </button>
+          <!-- Card Actions & Sharing -->
+          <div class="flex flex-col space-y-2 pt-2 border-t border-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-black text-slate-800">$${p.price.toFixed(2)}</span>
+              <div class="flex items-center space-x-1.5">
+                <!-- Share to WhatsApp -->
+                <a href="https://wa.me/?text=Check%20out%20this%20awesome%20digital%20asset:%20${encodeURIComponent(p.title)}%20for%20only%20$${p.price.toFixed(2)}!%20Join%20GlobalDigital%20store." target="_blank" class="w-8 h-8 bg-green-50 text-green-600 rounded-lg border border-green-200 flex items-center justify-center text-xs hover:bg-green-500 hover:text-white transition" title="Share via WhatsApp">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+                <!-- Share to Instagram info -->
+                <a href="https://instagram.com/global_digital_store" target="_blank" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg border border-red-200 flex items-center justify-center text-xs hover:bg-gradient-to-tr hover:from-yellow-500 hover:to-purple-600 hover:text-white transition" title="Follow on Instagram">
+                  <i class="fab fa-instagram"></i>
+                </a>
+                <button onclick="addToCart('${p.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5">
+                  <i class="fas fa-cart-plus"></i>
+                  <span>Add to Cart</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -405,6 +446,77 @@ function saveCartToStorage() {
   localStorage.setItem('cart_items', JSON.stringify(cart));
 }
 
+// WhatsApp Floating Widget and Support Ordering
+function toggleWhatsAppWidget(forceState) {
+  const popup = document.getElementById('whatsapp-widget-popup');
+  if (forceState !== undefined) {
+    if (forceState) {
+      popup.classList.remove('hidden');
+      setTimeout(() => popup.classList.remove('scale-95'), 10);
+    } else {
+      popup.classList.add('scale-95');
+      setTimeout(() => popup.classList.add('hidden'), 150);
+    }
+  } else {
+    const isHidden = popup.classList.contains('hidden');
+    toggleWhatsAppWidget(isHidden);
+  }
+}
+
+function updateWhatsAppCartSummary() {
+  const summaryBox = document.getElementById('wa-cart-summary-box');
+  if (cart.length === 0) {
+    summaryBox.innerHTML = `
+      <span class="text-[10px] text-slate-400 font-medium">Your basket is currently empty. Add items to see direct order checkout!</span>
+    `;
+    return;
+  }
+
+  const itemsHTML = cart.map(item => `
+    <div class="flex items-center justify-between text-[11px] text-slate-600 font-medium">
+      <span class="truncate max-w-[150px]">${item.product.title}</span>
+      <span class="font-bold text-slate-800">x${item.quantity}</span>
+    </div>
+  `).join('');
+
+  const subtotal = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+
+  summaryBox.innerHTML = `
+    <div class="border-b border-slate-100 pb-1.5 mb-1.5 space-y-1">
+      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Your Direct Order</span>
+      ${itemsHTML}
+    </div>
+    <div class="flex items-center justify-between text-[11px] font-bold text-slate-800">
+      <span>Total:</span>
+      <span class="text-green-600">$${subtotal.toFixed(2)}</span>
+    </div>
+  `;
+}
+
+function sendWhatsAppMessage() {
+  const customText = document.getElementById('wa-custom-msg').value.trim();
+  let baseMsg = '';
+
+  if (cart.length > 0) {
+    const subtotal = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    const itemsText = cart.map(item => `• ${item.product.title} (x${item.quantity}) - $${(item.product.price * item.quantity).toFixed(2)}`).join('\n');
+
+    baseMsg = `Hello GlobalDigital! I would like to place a direct order for the following items:\n\n${itemsText}\n\n*Total Due: $${subtotal.toFixed(2)}*\n\n`;
+  } else {
+    baseMsg = `Hello GlobalDigital Support! I have an inquiry:\n\n`;
+  }
+
+  if (customText) {
+    baseMsg += `Message: "${customText}"`;
+  } else if (cart.length === 0) {
+    baseMsg += `I am interested in learning more about your multi-lingual digital courses and eBooks.`;
+  }
+
+  // Pre-fill clicking link with the official WhatsApp format API (using mock merchant phone number +15550199)
+  const whatsappUrl = `https://wa.me/15550199?text=${encodeURIComponent(baseMsg)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
 function loadCartFromStorage() {
   try {
     const data = localStorage.getItem('cart_items');
@@ -423,7 +535,10 @@ function openCheckoutModal() {
   toggleCartDrawer(false);
 
   const subtotal = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
-  document.getElementById('checkout-total').textContent = `$${subtotal.toFixed(2)}`;
+  document.querySelectorAll('#checkout-total').forEach(el => el.textContent = `$${subtotal.toFixed(2)}`);
+
+  // Default back to stripe selection
+  selectPaymentMethod('stripe');
 
   const modal = document.getElementById('checkout-modal');
   modal.classList.remove('hidden');
@@ -436,7 +551,47 @@ function closeCheckoutModal() {
   card.className = card.className.replace('scale-100', 'scale-95');
   setTimeout(() => {
     document.getElementById('checkout-modal').classList.add('hidden');
+    document.getElementById('payment-processing-overlay').classList.add('hidden');
   }, 200);
+}
+
+// Payment Switch Logic
+function selectPaymentMethod(method) {
+  currentPaymentMethod = method;
+
+  const stripeBtn = document.getElementById('pay-stripe-btn');
+  const paypalBtn = document.getElementById('pay-paypal-btn');
+  const waBtn = document.getElementById('pay-wa-btn');
+
+  const stripeInputs = document.getElementById('stripe-card-inputs');
+  const paypalInputs = document.getElementById('paypal-sim-button');
+  const waInputs = document.getElementById('whatsapp-checkout-info');
+
+  const submitLabel = document.getElementById('checkout-submit-label');
+
+  // Reset button designs
+  [stripeBtn, paypalBtn, waBtn].forEach(btn => {
+    btn.className = "py-2 px-3 border border-gray-250 bg-white text-slate-600 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center space-y-1 focus:outline-none";
+  });
+
+  // Reset inputs visibility
+  stripeInputs.classList.add('hidden');
+  paypalInputs.classList.add('hidden');
+  waInputs.classList.add('hidden');
+
+  if (method === 'stripe') {
+    stripeBtn.className = "py-2 px-3 border-2 border-indigo-600 bg-indigo-50 text-indigo-700 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center space-y-1 focus:outline-none";
+    stripeInputs.classList.remove('hidden');
+    submitLabel.textContent = "Authorize & Complete Purchase";
+  } else if (method === 'paypal') {
+    paypalBtn.className = "py-2 px-3 border-2 border-indigo-600 bg-indigo-50 text-indigo-700 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center space-y-1 focus:outline-none";
+    paypalInputs.classList.remove('hidden');
+    submitLabel.textContent = "Pay via PayPal Express";
+  } else if (method === 'whatsapp') {
+    waBtn.className = "py-2 px-3 border-2 border-green-600 bg-green-50 text-green-700 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center space-y-1 focus:outline-none";
+    waInputs.classList.remove('hidden');
+    submitLabel.textContent = "Place Order on WhatsApp";
+  }
 }
 
 // Checkout Form submission
@@ -446,45 +601,68 @@ async function handleCheckoutSubmit(event) {
   const fullName = document.getElementById('checkout-fullname').value.trim();
   const email = document.getElementById('checkout-email').value.trim();
 
-  const checkoutPayload = {
-    fullName,
-    email,
-    items: cart.map(item => ({
-      id: item.product.id,
-      quantity: item.quantity
-    }))
-  };
-
-  try {
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(checkoutPayload)
-    });
-
-    if (!response.ok) {
-      const errData = await response.json();
-      throw new Error(errData.error || 'Server rejected checkout');
+  // Validate fields if card is selected
+  if (currentPaymentMethod === 'stripe') {
+    const cardNum = document.getElementById('stripe-card-num').value.trim();
+    if (!cardNum) {
+      showToast('Please provide a valid card number to simulate payment.', 'error');
+      return;
     }
-
-    const orderResult = await response.json();
-
-    // Close checkout registration
-    closeCheckoutModal();
-
-    // Fill and Display Success Delivables access modal
-    showSuccessModal(orderResult);
-
-    // Clear Cart
-    cart = [];
-    saveCartToStorage();
-    updateCartUI();
-    showToast('Transaction completed successfully!', 'success');
-
-  } catch (error) {
-    console.error('Checkout purchase transaction failed:', error);
-    showToast(error.message || 'Payment authentication failed.', 'error');
   }
+
+  // Show processing loader
+  const processingOverlay = document.getElementById('payment-processing-overlay');
+  processingOverlay.classList.remove('hidden');
+
+  // Simulate payment gateway handshakes for 1.8 seconds
+  setTimeout(async () => {
+    const checkoutPayload = {
+      fullName,
+      email,
+      items: cart.map(item => ({
+        id: item.product.id,
+        quantity: item.quantity
+      }))
+    };
+
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(checkoutPayload)
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Server rejected checkout');
+      }
+
+      const orderResult = await response.json();
+
+      // Clear processing loader and close checkout modal
+      processingOverlay.classList.add('hidden');
+      closeCheckoutModal();
+
+      // Trigger redirect to WhatsApp if direct order was selected
+      if (currentPaymentMethod === 'whatsapp') {
+        sendWhatsAppMessage();
+      }
+
+      // Fill and Display Success Deliverables access modal
+      showSuccessModal(orderResult);
+
+      // Clear Cart
+      cart = [];
+      saveCartToStorage();
+      updateCartUI();
+      showToast('Transaction processed successfully via ' + currentPaymentMethod + '!', 'success');
+
+    } catch (error) {
+      console.error('Checkout purchase transaction failed:', error);
+      processingOverlay.classList.add('hidden');
+      showToast(error.message || 'Payment authentication failed.', 'error');
+    }
+  }, 1800);
 }
 
 // Success delivery UI panel

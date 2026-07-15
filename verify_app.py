@@ -87,6 +87,12 @@ def run_verification():
             print("✍️ Filling out customer checkout details...")
             page.locator("#checkout-fullname").fill("Alex Developer")
             page.locator("#checkout-email").fill("alex@developer.io")
+
+            # Fill in simulated Stripe Credit Card details
+            print("💳 Filling out simulated Stripe Card details...")
+            page.locator("#stripe-card-num").fill("4242 4242 4242 4242")
+            page.locator("#stripe-card-exp").fill("12/28")
+            page.locator("#stripe-card-cvc").fill("242")
             time.sleep(0.5)
 
             # Take a screenshot of the checkout modal
@@ -96,7 +102,7 @@ def run_verification():
             # Submit payment/checkout form
             print("🔒 Submitting authorization purchase form...")
             page.get_by_role("button", name="Authorize & Complete Purchase").click()
-            time.sleep(1.5) # wait for response and success modal transition
+            time.sleep(3.0) # wait for simulated payments overlay processing and success modal transition
 
             # Verify that Success Modal is active
             success_modal = page.locator("#success-modal")
