@@ -104,6 +104,7 @@ async function handleFormSubmit(event) {
   const price = parseFloat(document.getElementById('prod-price').value);
   const language = document.getElementById('prod-lang').value.trim();
   const category = document.getElementById('prod-category').value.trim();
+  const programmingLanguage = document.getElementById('prod-proglang').value.trim() || 'No Code';
   const image = document.getElementById('prod-image').value.trim() || null;
   const featuresText = document.getElementById('prod-features').value.trim();
 
@@ -118,6 +119,7 @@ async function handleFormSubmit(event) {
     type,
     price,
     language,
+    programmingLanguage,
     category,
     image,
     features

@@ -110,7 +110,7 @@ app.get('/api/products', (req, res) => {
  * Vendor endpoint to add a new digital product (Course, PDF, ZIP file).
  */
 app.post('/api/products', (req, res) => {
-  const { title, description, type, language, category, price, image, features } = req.body;
+  const { title, description, type, language, programmingLanguage, category, price, image, features } = req.body;
 
   // Simple validation
   if (!title || !description || !type || !language || !category || price === undefined) {
@@ -144,6 +144,7 @@ app.post('/api/products', (req, res) => {
     description,
     type,
     language,
+    programmingLanguage: programmingLanguage || 'No Code',
     category,
     price: parseFloat(price),
     rating: 5.0,
